@@ -11,9 +11,9 @@ interface Project {
 const projects: Project[] = [
   {
     id: '1',
-    title: 'Proyecto 1',
-    description: 'Descripción del Proyecto 1',
-    url: '/projects/1',
+    title: 'Uglysoul',
+    description: 'AI chatbot that hates everyone, a troll',
+    url: '/projects/uglysoul',
   },
   {
     id: '2',
