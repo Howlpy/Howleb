@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import uglyimage from '@public/uglysoul.webp';
 
 export default function Project1() {
   return (
