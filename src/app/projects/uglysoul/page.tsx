@@ -109,7 +109,7 @@ export default function AIPage() {
         href="/"
         className="inline-block px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-300"
       >
-        Ir a Inicio
+        Home
       </Link>
     </main>
   );
