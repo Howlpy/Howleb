@@ -40,7 +40,7 @@ jobs:
       # Paso 6: Autenticación en el cluster de Kubernetes
       - name: Authenticate to Kubernetes cluster
         run: |
-          echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig.yaml
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > kubeconfig.yaml
           export KUBECONFIG=kubeconfig.yaml
 
       # Paso 7: Actualizar el despliegue en Kubernetes
