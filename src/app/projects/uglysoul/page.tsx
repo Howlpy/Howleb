@@ -51,12 +51,13 @@ export default function AIPage() {
 
       {/* Estado de conexión con luz */}
       <div className="flex items-center mb-6">
+        
+        <p className="text-lg">Estado: </p>
         <div
           className={`w-4 h-4 rounded-full mr-2 ${
             isConnected ? 'bg-green-500 shadow-green-glow' : 'bg-red-500'
           }`}
         ></div>
-        <p className="text-lg">Estado: {isConnected ? 'Conectado' : 'Desconectado'}</p>
       </div>
 
       {/* Botón de conexión */}
