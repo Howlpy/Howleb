@@ -1,61 +1,116 @@
-import Image from 'next/image';
+"use client"
+import React, { useState } from 'react';
 import Link from 'next/link';
 
-export default function Project1() {
+function useBotSimulation() {
+  const [isConnected, setIsConnected] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [internalThoughts, setInternalThoughts] = useState("");
+
+  function toggleConnection() {
+    setIsConnected(!isConnected);
+    if (!isConnected) {
+      addMessage("Bot: ¡Conectado! Listo para recibir comandos.");
+      updateInternalThoughts("Inicializando sistemas...");
+    } else {
+      addMessage("Bot: Desconectado.");
+      updateInternalThoughts("Sistemas apagados.");
+    }
+  }
+
+  function addMessage(newMessage) {
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+  }
+
+  function updateInternalThoughts(thought) {
+    setInternalThoughts(thought);
+  }
+
+  return { isConnected, toggleConnection, messages, addMessage, internalThoughts, updateInternalThoughts };
+}
+
+export default function AIPage() {
+  const { isConnected, toggleConnection, messages, addMessage, internalThoughts, updateInternalThoughts } = useBotSimulation();
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSendMessage = (sender, message) => {
+    addMessage(`${sender}: ${message}`);
+    updateInternalThoughts(`Procesando: "${message}"...`);
+    setTimeout(() => {
+      addMessage(`Bot: He recibido tu mensaje: "${message}".`);
+      updateInternalThoughts("Esperando más instrucciones...");
+    }, 2000); // Simula un retraso en la respuesta del bot
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-dark text-gray-100 py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-      <div className="max-w-4xl w-full">
-        <h1 className="text-4xl font-extrabold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-          Uglysoul AI
-        </h1>
-        <div className="flex justify-center mb-8">
-        <Image
-          src="/uglysoul.webp?height=300&width=600"
-          alt="Imagen del bot Uglysoul"
-          width={800}
-          height={400}
-          className="rounded-lg shadow-lg mb-8"
-        />
-        </div>
+    <main className="min-h-screen flex flex-col items-center justify-start p-8 relative bg-gray-900 text-white">
+      <h1 className="text-6xl font-extrabold mb-12 mt-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
+        AI UglySoul
+      </h1>
+      <h2 className="text-4xl font-bold mb-8 text-center">Visualizador de la mente</h2>
 
-        <div className="prose prose-invert max-w-none">
-          <p className="text-xl mb-4 text-center">
-            Uglysoul es un bot de inteligencia artificial para Discord, diseñado para comprender y mejorar la interacción con los usuarios a través de análisis de sentimiento, detección de intenciones y procesamiento de lenguaje natural.
-          </p>
-          
-          <h2 className="text-2xl font-bold mt-8 mb-4 text-center">Características principales</h2>
-          <ul className="list-disc space-y-2 pl-5  text-center list-none">
-            <li>- Analiza emociones y adapta respuestas de manera empática.</li>
-            <li>- Detecta intenciones y entidades usando NLP avanzado.</li>
-            <li>- Realiza aprendizaje reflexivo con retroalimentación.</li>
-          </ul>
+      {/* Estado de conexión con luz */}
+      <div className="flex items-center mb-6">
+        <div
+          className={`w-4 h-4 rounded-full mr-2 ${
+            isConnected ? 'bg-green-500 shadow-green-glow' : 'bg-red-500'
+          }`}
+        ></div>
+        <p className="text-lg">Estado: {isConnected ? 'Conectado' : 'Desconectado'}</p>
+      </div>
 
-          <h2 className="text-2xl font-bold mt-8 mb-4 text-center">Tecnologías utilizadas</h2>
-          <p className="text-center">
-            Este proyecto fue desarrollado utilizando las siguientes tecnologías:
-          </p>
-          <ul className="list-disc pl-5 space-y-2 text-center list-none">
-            <li>- React y Next.js para la interfaz.</li>
-            <li>- TypeScript para un tipado seguro.</li>
-            <li>- Tailwind CSS para estilos modernos y eficientes.</li>
-            <li>- spaCy y Transformers para PLN avanzado.</li>
-          </ul>
+      {/* Botón de conexión */}
+      <button
+        onClick={toggleConnection}
+        className="mb-6 p-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+      >
+        {isConnected ? 'Desconectar' : 'Conectar'} al bot
+      </button>
 
-          <h2 className="text-2xl font-bold mt-8 mb-4 text-center">Impacto y Resultados</h2>
-          <p className="text-center">
-            Uglysoul mejora la experiencia en comunidades de Discord al ofrecer respuestas más humanas y comprensivas, aumentando la participación y la calidad de las conversaciones.
-          </p>
-        </div>
-
-        <div className="mt-12 text-center">
-          <Link 
-            href="/"
-            className="inline-block px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-300"
-          >
-            Volver a la página principal
-          </Link>
+      {/* Sección de pensamientos internos */}
+      <div className="w-full max-w-2xl bg-gray-800 p-6 rounded-lg mb-6">
+        <h3 className="text-xl font-medium mb-4">Pensamientos Internos:</h3>
+        <div className="bg-gray-700 p-4 rounded-lg">
+          <p className="text-gray-300 italic">{internalThoughts}</p>
         </div>
       </div>
-    </div>
-  )
+
+      {/* Sección de mensajes y respuestas */}
+      <div className="w-full max-w-2xl bg-gray-800 p-6 rounded-lg mb-6">
+        <h3 className="text-xl font-medium mb-4">Mensajes y Respuestas:</h3>
+        <div className="bg-gray-700 p-4 rounded-lg max-h-64 overflow-y-auto">
+          <ul className="space-y-2">
+            {messages.map((msg, index) => (
+              <li key={index} className="text-gray-300">
+                {msg}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Entrada de mensajes */}
+      <input
+        type="text"
+        placeholder="Escribe un mensaje para el bot..."
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && inputValue.trim()) {
+            handleSendMessage('Usuario', inputValue);
+            setInputValue('');
+          }
+        }}
+        className="mb-4 p-2 w-full max-w-2xl border rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+
+      {/* Botón para ir a inicio */}
+      <Link
+        href="/"
+        className="inline-block px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-300"
+      >
+        Ir a Inicio
+      </Link>
+    </main>
+  );
 }
