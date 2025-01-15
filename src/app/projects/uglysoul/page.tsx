@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 function useBotSimulation() {
   const [isConnected, setIsConnected] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<string[]>([]);
   const [internalThoughts, setInternalThoughts] = useState("");
 
   function toggleConnection() {
@@ -18,11 +18,11 @@ function useBotSimulation() {
     }
   }
 
-  function addMessage(newMessage) {
+  function addMessage(newMessage: string) {
     setMessages((prevMessages) => [...prevMessages, newMessage]);
   }
 
-  function updateInternalThoughts(thought) {
+  function updateInternalThoughts(thought: React.SetStateAction<string>) {
     setInternalThoughts(thought);
   }
 
@@ -33,7 +33,7 @@ export default function AIPage() {
   const { isConnected, toggleConnection, messages, addMessage, internalThoughts, updateInternalThoughts } = useBotSimulation();
   const [inputValue, setInputValue] = useState("");
 
-  const handleSendMessage = (sender, message) => {
+  const handleSendMessage = (sender: string, message: string) => {
     addMessage(`${sender}: ${message}`);
     updateInternalThoughts(`Procesando: "${message}"...`);
     setTimeout(() => {
